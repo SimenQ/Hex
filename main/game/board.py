@@ -20,15 +20,24 @@ class Board:
             assert starting_player in [1, 2]
             self.starting_player = starting_player
 
-    # This function takes the board and turn it into a one-dimenstional array
-    def get_1D_representation_of_board(self):
-        return self.board.flatten()
-
+    def get_state(self):
+        """
+        Returns a string representation of the current state of the board.
+        Each cell in the board is represented by a single digit (0, 1, or 2).
+        The digits are concatenated into a single string, row by row.
+        For example, a 3x3 board with the following contents:
+        [[1, 0, 0],
+        [0, 2, 1],
+        [0, 0, 2]]
+        would be represented as the string "100021002".
+        """
+        return ''.join([str(cell) for row in self.board for cell in row])
+    
     def get_legal_moves(self):
-        flat_board = self.get_1D_representation_of_board()
+        board_1D = self.board.flatten()
         legal_moves = []
-        for i in range(len(flat_board)):
-            if flat_board[i] == 0:
+        for i in range(len(board_1D)):
+            if board_1D[i] == 0: 
                 row = i // self.board_size
                 col = i % self.board_size
                 legal_moves.append((row, col))
