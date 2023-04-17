@@ -4,7 +4,7 @@ import numpy as np
 
 
 class MCTS:
-    def __init__(self, root, neural_net, c):
+    def __init__(self, root, neural_net):
         self.root = root
         self.states = {}
         self.state_action = {}
@@ -49,13 +49,31 @@ class MCTS:
         
     #Needs the Neural Net to be implemented 
     def get_distribution(self, board):
+        
         return
 
-    def rollout(self, board, epsilion, player):
-        return
+    def rollout(self, board, epsilon, player):
+        random_number = random.random()
+        if random_number > epsilon:
+            state = board.get_state()
+            split_state = [player]
+            for i in state.split():
+                split_state.append(int(i))
+            split_state = np.array([split_state])
+            preds = self.nn.predict(split_state)
+            return self.nn.best_action(preds[0])
+        else: 
+            return self.random_action(board)
 
     def critic(self, board, player):
-        return
+        state = board.get_state()
+        split_state = [player]
+        for i in state.split():
+            split_state.append(int(i))
+        split_state = np.array([split_state])
+        preds = self.nn.predict(split_state)
+        return preds[1][0][0]
+
 
     def random_action(self, board):
         return random.choice(board.get_legal_actions())

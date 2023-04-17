@@ -1,5 +1,6 @@
 
 import collections
+from copy import deepcopy
 import numpy as np
 import random
 
@@ -114,8 +115,11 @@ def check_winning_state(self, player=None):
 
 # Can be modified or removed depening on how we want to implemnt the reward for the agent.
 # Adding this simple reward function for testing
-def get_reward(self, player):
+def get_reward(self, player=1):
     if (self.check_winning_state(player)):
         return 1
     else:
         return -100
+
+def clone(self):
+    return deepcopy(self)
