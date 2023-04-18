@@ -4,7 +4,6 @@ import numpy as np
 
 
 class Topp:
-
     
     def game(self, board, player_1, player_2, starting_player, board_visulazier, display = True): 
         board.initilize_board(starting_player)

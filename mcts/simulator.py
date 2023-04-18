@@ -3,13 +3,13 @@ import numpy as np
 import random
 from game.board import Board
 class Simulator: 
-    def __init__(self, board, board_size, tree):
-        self.board = board
+    def __init__(self, board, board_size, starting_player, tree):
+        self.board = Board(board_size, starting_player)
         self.board_size = board_size
         self.tree = tree
         self.initial_board = board.copy()
 
-    def initilize_root(self, state, player): 
+    def initialize_root(self, state, player): 
         state_values = state.split()
         board_state = np.zeros((self.board_size, self.board_size), dtype=int)
         for i in range(self.board_size):

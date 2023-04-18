@@ -2,7 +2,7 @@ class Parameters:
     def __init__(self):
         # Board parameters
         self.board_size = 6
-        self.starting_player = 0 # 0 for mix
+        self.starting_player = None #None for mix
         # MCTS parameters
         self.number_of_games = 25
         self.number_of_search_episodes = 100

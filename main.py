@@ -1,12 +1,12 @@
 from rbuf import RBUF
-from topp import TOPP
+from topp import Topp
 from neuralnet.neuralnet import NeuralNet
 from parameters import Parameters
 from game.board import Board
 from game.board_visualizer import BoardVisualizer
-from game.play_game import GameSimulator
+from mcts.simulator import Simulator
 from mcts.MonteCarloTreeSearch import MCTS
-import numpy as np
+
 
 p = Parameters()
 # Initialize save interval, RBUF, ANET and board (state manager)
@@ -16,18 +16,18 @@ nn = NeuralNet(p.nn_dims, p.board_size, p.lr, p.activation_function, p.optimizer
 board = Board(p.board_size, p.starting_player)
 board_visualizer = BoardVisualizer()
 tree = MCTS(board.get_state(), nn)
-sim = GameSimulator(board, p.board_size, p.starting_player, tree)
-topp = TOPP()
+sim = Simulator(board, p.board_size, p.starting_player, tree)
+topp = Topp()
 
 def run_full_game(epsilon, sigma, starting_player):
     # Starting state
-    board.reset_board(starting_player)
+    board.initialize_board(starting_player)
     while not board.check_winning_state():
         # Initialize simulations
         tree.root = board.get_state()
         sim.initialize_root(tree.root, board.player)
         # Return distribution
-        D, Q = sim.sim_games(epsilon, sigma, p.number_of_search_episodes)
+        D, Q = sim.simulate(epsilon, sigma, p.number_of_search_episodes)
         D = check_for_winning_move(board, D)
         # Parse to state representation
         s = str(board.player) + " " + tree.root
@@ -55,7 +55,7 @@ def check_for_winning_move(board, D):
         # Set limit at 0.5 as this means this move will be taken based on D no matter what, increase the weight for rbuf
         if el[1] > 0.3:
             # Check for winning move
-            board_copy = board.clone()
+            board_copy = board.copy()
             board_copy.make_move(el[0])
             if board_copy.check_winning_state():
                 D = [(el[0], 1.0 if ind == i else 0.0) for ind, el in enumerate(D)]
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     if (p.topp):
         episodes = [i*save_interval for i in range(p.number_of_cached_anet +1)]
         actors = [NeuralNet(board_size=p.board_size, load_saved_model=True, episode_number=i) for i in episodes]
-        topp.run_topp(board, episodes, actors, p.topp_games, board_visualizer, visualize_last_game=p.visualize_last_game)
+        topp.tournament(board, episodes, actors, p.topp_games, board_visualizer, visualize_last_game=p.visualize_last_game)
     else:
         epsilon = p.epsilon
         sigma = p.sigma
