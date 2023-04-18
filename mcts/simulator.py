@@ -9,7 +9,7 @@ class Simulator:
         self.tree = tree
         self.initial_board = board.copy()
 
-    def initilize_root(self, state, player): 
+    def initialize_root(self, state, player): 
         state_values = state.split()
         board_state = np.zeros((self.board_size, self.board_size), dtype=int)
         for i in range(self.board_size):
