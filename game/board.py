@@ -6,19 +6,32 @@ import random
 
 
 class Board:
-
-    def __init__(self, board_size, starting_player):
+    """
+     def __init__(self, board_size, starting_player):
         self.board_size = board_size
         self.starting_player = starting_player
         self.board = []
         self.initialize_board(self.starting_player)
 
-    def initialize_board(self, starting_player=None):
+    def initialize_board(self, starting_player):
         self.board = np.zeros((self.board_size, self.board_size), dtype=int)
         if starting_player == None:
             self.starting_player = random.choice([1, 2])
         else:
             self.starting_player = starting_player
+    
+    """
+    def __init__(self, board_size, starting_player):
+        self.board_size = board_size
+        self.board = []
+        self.starting_player = starting_player
+        self.initialize_board(self.starting_player)
+
+    def initialize_board(self, starting_player):
+        self.board = np.array(
+            [[0 for i in range(self.board_size)] for j in range(self.board_size)]
+        )
+        self.starting_player = starting_player
             
     def copy(self):
         return deepcopy(self)
@@ -44,6 +57,7 @@ class Board:
                 row = i // self.board_size
                 col = i % self.board_size
                 legal_moves.append((row, col))
+        print("Legal moves: ", legal_moves)
         return legal_moves
 
     def check_legal_move(self, move):
@@ -115,7 +129,6 @@ class Board:
 
         return False
 
-<<<<<<< HEAD
     # Can be modified or removed depening on how we want to implemnt the reward for the agent.
     # Adding this simple reward function for testing
     def get_reward(self, player=1):
@@ -123,16 +136,3 @@ class Board:
             return 1
         else:
             return -1
-
-    def copy(self):
-        return deepcopy(self)
-=======
-# Can be modified or removed depening on how we want to implemnt the reward for the agent.
-# Adding this simple reward function for testing
-def get_reward(self, player=1):
-    if (self.check_winning_state(player)):
-        return 1
-    else:
-        return -100
-
->>>>>>> 4f4ac6a31450fdf80a4acc422748e45e7ca39d9d
