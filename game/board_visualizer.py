@@ -108,3 +108,5 @@ def convert_diamond_board_shape(board):
         new_board.append(tmp)
         counter += 1
     return new_board
+
+    
