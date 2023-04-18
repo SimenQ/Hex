@@ -1,10 +1,10 @@
 from rbuf import RBUF
-from topp import TOPP
+from topp import Topp
 from neuralnet.neuralnet import NeuralNet
 from parameters import Parameters
 from game.board import Board
 from game.board_visualizer import BoardVisualizer
-from game.play_game import GameSimulator
+from mcts.simulator import Simulator
 from mcts.MonteCarloTreeSearch import MCTS
 import numpy as np
 
@@ -16,16 +16,26 @@ nn = NeuralNet(p.nn_dims, p.board_size, p.lr, p.activation_function, p.optimizer
 board = Board(p.board_size, p.starting_player)
 board_visualizer = BoardVisualizer()
 tree = MCTS(board.get_state(), nn)
-sim = GameSimulator(board, p.board_size, p.starting_player, tree)
-topp = TOPP()
+sim = Simulator(board, p.board_size, tree)
+topp = Topp()
+
+
+def get_best_move_from_D(D):
+    best_move = None
+    most_visits = -1
+    for d in D:
+        if (d[1] > most_visits):
+            best_move = d[0]
+            most_visits = d[1]
+    return best_move
 
 def run_full_game(epsilon, sigma, starting_player):
     # Starting state
-    board.reset_board(starting_player)
+    board.initilize_board(starting_player)
     while not board.check_winning_state():
         # Initialize simulations
         tree.root = board.get_state()
-        sim.initialize_root(tree.root, board.player)
+        sim.initialize_root(tree.root, board.starting_player)
         # Return distribution
         D, Q = sim.sim_games(epsilon, sigma, p.number_of_search_episodes)
         D = check_for_winning_move(board, D)
@@ -40,15 +50,6 @@ def run_full_game(epsilon, sigma, starting_player):
     tree.reset()
     # Reset memoization of visited states during rollouts
     nn.fit(rbuf.get_random_batch(p.batch_size))
-
-def get_best_move_from_D(D):
-    best_move = None
-    most_visits = -1
-    for d in D:
-        if (d[1] > most_visits):
-            best_move = d[0]
-            most_visits = d[1]
-    return best_move
 
 def check_for_winning_move(board, D):
     for i, el in enumerate(D):
