@@ -121,5 +121,5 @@ def get_reward(self, player=1):
     else:
         return -100
 
-def clone(self):
+def copy(self):
     return deepcopy(self)

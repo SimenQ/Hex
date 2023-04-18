@@ -1,6 +1,7 @@
 import math
 import random 
 import numpy as np
+from neuralnet.neuralnet import NeuralNet
 
 
 class MCTS:
@@ -8,7 +9,7 @@ class MCTS:
         self.root = root
         self.states = {}
         self.state_action = {}
-        self.c = c
+        self.c = 1
         self.neural_net = neural_net
 
 
@@ -47,17 +48,39 @@ class MCTS:
             return math.inf
         return self.c*np.sqrt(np.log(self.get_N(state)) / (1 + self.get_N(state,action)))
         
-    #Needs the Neural Net to be implemented 
+    #Compute the distribution over moves for a given board state using the neural network.
+    #Returns a tuple containing the distribution over moves as a list of (move, probability) pairs, and the estimated
+    #value of the current state as a scalar.
     def get_distribution(self, board):
+        num_moves = board.board_size ** 2
+        all_moves = []
+        for i in range(num_moves):
+            move = NeuralNet.convert_to_2d_move(i, board.board_size)
+            all_moves.append(move)
         
-        return
+        current_state = board.get_state()
+        N_values = []
+        for move in all_moves: 
+            N_values = self.get_N(current_state, move)
+            N_values.append(N_values)
+        
+        normalized_N_values = NeuralNet.normilize(np.array(N_values))
 
+        move_probs = []
+        for i in range(len(all_moves)):
+            move_probs.append((all_moves[i], normalized_N_values[i]))
+
+        
+        return move_probs, self.get_Q(current_state)
+    
+    #Aims to predict an action using neural network given the current state of the board and epsilon value.
+    #Returns the best action if the random generated number is grater that epsilon otherwise returns a random action
     def rollout(self, board, epsilon, player):
         random_number = random.random()
         if random_number > epsilon:
-            state = board.get_state()
+            current_state = board.get_state()
             split_state = [player]
-            for i in state.split():
+            for i in current_state.split():
                 split_state.append(int(i))
             split_state = np.array([split_state])
             preds = self.nn.predict(split_state)
@@ -65,10 +88,12 @@ class MCTS:
         else: 
             return self.random_action(board)
 
+    #Aims to predict the value of the current board state using the neural network.
+    #Returns the predicted value of the current board state
     def critic(self, board, player):
-        state = board.get_state()
+        current_state = board.get_state()
         split_state = [player]
-        for i in state.split():
+        for i in current_state.split():
             split_state.append(int(i))
         split_state = np.array([split_state])
         preds = self.nn.predict(split_state)
@@ -76,23 +101,23 @@ class MCTS:
 
 
     def random_action(self, board):
-        return random.choice(board.get_legal_actions())
+        return random.choice(board.get_legal_moves())
 
     def expand_tree(self, board):
        if board.check_winning_state():
         return
        
-       state = board.get_state()
-       actions = board.get_legal_actions()
-       if state not in self.state:
-        self.state[state] = {"N": 0, "Q": 0}
+       current_state = board.get_state()
+       actions = board.get_legal_moves()
+       if current_state not in self.state:
+        self.state[current_state] = {"N": 0, "Q": 0}
        for action in actions: 
-        if(state,action) not in self.state_action:
-            self.state_action[(state,action)] = {"N": 0, "Q": 0}
+        if(current_state,action) not in self.state_action:
+            self.state_action[(current_state,action)] = {"N": 0, "Q": 0}
 
 
     def select_action(self, board, player):
-        actions = board.get_legal_actions()
+        actions = board.get_legal_moves()
         for action in actions: 
             if (player == 1):
                 action_value = [self.get_Q(board,action) + self.exploration_bonus(board,action)]
