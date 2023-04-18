@@ -6,33 +6,18 @@ import random
 
 
 class Board:
-    """
-     def __init__(self, board_size, starting_player):
+
+    def __init__(self, board_size, starting_player):
         self.board_size = board_size
-        self.starting_player = starting_player
+        self.player = starting_player
         self.board = []
-        self.initialize_board(self.starting_player)
+        self.initialize_board(self.player)
+        
 
     def initialize_board(self, starting_player):
         self.board = np.zeros((self.board_size, self.board_size), dtype=int)
-        if starting_player == None:
-            self.starting_player = random.choice([1, 2])
-        else:
-            self.starting_player = starting_player
-    
-    """
-    def __init__(self, board_size, starting_player):
-        self.board_size = board_size
-        self.board = []
-        self.starting_player = starting_player
-        self.initialize_board(self.starting_player)
+        self.player = starting_player
 
-    def initialize_board(self, starting_player):
-        self.board = np.array(
-            [[0 for i in range(self.board_size)] for j in range(self.board_size)]
-        )
-        self.starting_player = starting_player
-            
     def copy(self):
         return deepcopy(self)
 
@@ -47,7 +32,7 @@ class Board:
         [0, 0, 2]]
         would be represented as the string "100021002".
         """
-        return ''.join([str(cell) for row in self.board for cell in row])
+        return ' '.join([str(cell) for row in self.board for cell in row])
     
     def get_legal_moves(self):
         board_1D = self.board.flatten()
@@ -57,9 +42,8 @@ class Board:
                 row = i // self.board_size
                 col = i % self.board_size
                 legal_moves.append((row, col))
-        print("Legal moves: ", legal_moves)
         return legal_moves
-
+    
     def check_legal_move(self, move):
         try:
             self.board[move[0]][move[1]] == 0

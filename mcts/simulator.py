@@ -3,15 +3,21 @@ import numpy as np
 import random
 from game.board import Board
 class Simulator: 
-    def __init__(self, board, board_size, starting_player, tree):
+    def __init__(self, playing_board, board_size, starting_player, tree):
         self.board = Board(board_size, starting_player)
         self.board_size = board_size
         self.tree = tree
         
 
     def initialize_root(self, state, player): 
+        player = player
         state_values = state.split()
-        board_state = np.array([[int(i) for i in state_values[j*self.board_size:(j+1)*self.board_size]] for j in range(self.board_size)],dtype=object)
+        board_state = np.zeros((self.board_size, self.board_size), dtype=int)
+        for i in range(self.board_size):
+            row_start = i * self.board_size
+            row_end = row_start + self.board_size
+            board_state[i] = [int(val) for val in state_values[row_start:row_end]]
+    
         self.board.player = player
         self.board.board = board_state 
 
@@ -32,10 +38,8 @@ class Simulator:
     
     def simulate(self, sigma, epsilon, num_search_games):
         board_copy = self.board.copy()
-        num_legal_moves = len(board_copy.get_legal_moves())
-        print("Number of legal moves: ", num_legal_moves)
-        num_simulations = int(num_search_games / num_legal_moves)
-     
+        num_simulations = int(num_search_games / len(board_copy.get_legal_moves()))
+        
         for i in range(max(num_simulations, 10)): 
             seq = self.tree_search(board_copy)
             seq.reverse()

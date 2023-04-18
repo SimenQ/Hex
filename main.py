@@ -25,18 +25,18 @@ def run_full_game(epsilon, sigma, starting_player):
     while not board.check_winning_state():
         # Initialize simulations
         tree.root = board.get_state()
-        sim.initialize_root(tree.root, board.starting_player)
+        sim.initialize_root(tree.root, board.player)
         # Return distribution
         D, Q = sim.simulate(sigma, epsilon, p.number_of_search_episodes)
         D = check_for_winning_move(board, D)
         # Parse to state representation
-        s = str(board.starting_player) + " " + tree.root
+        s = str(board.player) + " " + tree.root
         # Select move based on D
         next_move = get_best_move_from_D(D)
         # Add to replay buffer
         rbuf.add((s, D, Q))
         board.make_move(next_move)
-        sim.reset(board.starting_player)
+        sim.reset(board.player)
     tree.reset()
     # Reset memoization of visited states during rollouts
     nn.fit(rbuf.get_random_batch(p.batch_size))
@@ -62,7 +62,7 @@ def check_for_winning_move(board, D):
                 return D
             # Check for opponent winning move
             board_copy = board.copy()
-            board_copy.make_move(el[0], board_copy.starting_player % 2 + 1)
+            board_copy.make_move(el[0], board_copy.player % 2 + 1)
             if board_copy.check_winning_state():
                 D = [(el[0], 1.0 if ind == i else 0.0) for ind, el in enumerate(D)]
                 return D
@@ -81,7 +81,7 @@ if __name__ == "__main__":
             if game % save_interval == 0:
                 nn.save_model(f"{p.board_size}x{p.board_size}_ep", game)
             print("Game no. " + str(game+1))
-            run_full_game(epsilon, sigma, game % 2 + 1 if p.starting_player==None else p.starting_player)
+            run_full_game(epsilon, sigma, game % 2 + 1 if p.starting_player==0 else p.starting_player)
             epsilon *= p.epsilon_decay
             sigma *= p.sigma_decay
         nn.save_model(f"{p.board_size}x{p.board_size}_ep", p.number_of_games)
