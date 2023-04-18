@@ -19,6 +19,9 @@ class Board:
             self.starting_player = random.choice([1, 2])
         else:
             self.starting_player = starting_player
+            
+    def copy(self):
+        return deepcopy(self)
 
     def get_state(self):
         """
@@ -112,6 +115,7 @@ class Board:
 
         return False
 
+<<<<<<< HEAD
     # Can be modified or removed depening on how we want to implemnt the reward for the agent.
     # Adding this simple reward function for testing
     def get_reward(self, player=1):
@@ -122,3 +126,13 @@ class Board:
 
     def copy(self):
         return deepcopy(self)
+=======
+# Can be modified or removed depening on how we want to implemnt the reward for the agent.
+# Adding this simple reward function for testing
+def get_reward(self, player=1):
+    if (self.check_winning_state(player)):
+        return 1
+    else:
+        return -100
+
+>>>>>>> 4f4ac6a31450fdf80a4acc422748e45e7ca39d9d
