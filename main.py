@@ -10,7 +10,7 @@ from mcts.MonteCarloTreeSearch import MCTS
 
 p = Parameters()
 # Initialize save interval, RBUF, ANET and board (state manager)
-save_interval = p.number_of_games // p.number_of_cached_anet
+save_interval = p.number_of_games // p.number_of_ANET
 rbuf = RBUF()
 nn = NeuralNet(p.nn_dims, p.board_size, p.lr, p.activation_function, p.optimizer)
 board = Board(p.board_size, p.starting_player)

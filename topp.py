@@ -19,11 +19,11 @@ class Topp:
 
         while not board.check_winning_state():
             current_state = board.get_state()
-            split_state = [starting_player]
+            split_values = [starting_player]
             for i in current_state.split():
-                split_state.append(int(i))
-            split_state = np.array([split_state])
-            preds = player.predict(split_state)[0]
+                split_values.append(int(i))
+            split_values = np.array([split_values])
+            preds = player.predict(split_values)[0]
             move = player.best_action(preds)
             board.make_move(move)
             num_moves += int(starting_player == 1)
@@ -40,10 +40,11 @@ class Topp:
 
         if display: 
             Topp.display_game(board, board_visulazier)
+
         return player_won
     
     def tournament(self, board, episodes, models, games, board_visulazier , display_last_game = True):
-        #list over number of games won by each player
+        #list over number of games won by player 1 (or both) player
         won_games = [0] * len(episodes)
         for i in range(len(models)): 
             for j in range(i+1, len(models)): 
@@ -78,10 +79,12 @@ class Topp:
                         pass
                 print("Model trained with (Episode = " + str(episodes[i]) + " won", num_wins_player_1, "times, as starting player")
                 print("Model trained with (Episode = : " + str(episodes[j]) + " won", num_wins_player_2, "times as second player")  
+                print("\n")
                 won_games[i] += num_wins_player_1
 
         print("-------------------------------------------------------------------------------------------------------------")
         print("Final scores")
+        print("\n")
         for i in range(len(episodes)): 
             print("Model trained with (Episode = " + str(episodes[i]) + ") won", won_games[i], "times, as starting player")
         print("-------------------------------------------------------------------------------------------------------------")

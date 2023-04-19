@@ -38,9 +38,9 @@ class Simulator:
     
     def simulate(self, sigma, epsilon, num_search_games):
         board_copy = self.board.copy()
-        num_simulations = int(num_search_games / len(board_copy.get_legal_moves()))
+        num_simulations_dynamic = int(num_search_games / len(board_copy.get_legal_moves()))
 
-        for i in range(max(num_simulations, 10)): 
+        for i in range(max(num_simulations_dynamic, 10)): 
             seq = self.tree_search(board_copy)
             seq.reverse()
             self.tree.expand_tree(board_copy)
