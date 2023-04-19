@@ -130,7 +130,7 @@ class NeuralNet:
     def load_saved_model(self, episode_number):
         model_path = "models/%sx%s_episode%s.h5" % (self.board_size, self.board_size, episode_number)
         loaded_model = ks.models.load_model(model_path, compile=False)
-        print("%sx%s_ep%s loaded" % (self.board_size, self.board_size, episode_number))
+        print("%sx%s_episode%s loaded" % (self.board_size, self.board_size, episode_number))
         return loaded_model
 
     @staticmethod
@@ -147,16 +147,7 @@ class NeuralNet:
             return array
         return array / array_sum
 
-    def safelog(tensor, base=0.0001):
-        safe_tensor = tf.math.maximum(tensor, base)
-        return tf.math.log(safe_tensor)
 
-    def deepnet_cross_entropy(targets, outputs):
-        log_softmax_outputs = tf.nn.log_softmax(outputs)
-        cross_entropy = -1 * targets * log_softmax_outputs
-        cross_entropy_sum = tf.reduce_sum(cross_entropy, axis=[1])
-        mean_cross_entropy = tf.reduce_mean(cross_entropy_sum)
-        return mean_cross_entropy
     
 # Static values used to select activation function
 activation_function = {

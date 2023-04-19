@@ -73,6 +73,8 @@ class MCTS:
         
         return move_probs, self.get_Q(current_state)
     
+    
+    
     #Aims to predict an action using neural network given the current state of the board and epsilon value.
     #Returns the best action if the random generated number is grater that epsilon otherwise returns a random action
     def rollout(self, board, epsilon, player):
@@ -96,7 +98,7 @@ class MCTS:
         for i in current_state.split():
             split_values.append(int(i))
         split_values = np.array([split_values])
-        preds = self.nn.predict(split_values)
+        preds = self.neural_net.predict(split_values)
         return preds[1][0][0]
 
 
@@ -131,13 +133,15 @@ class MCTS:
     def traverse(self, board):
         sequence = []
         while not board.check_winning_state() and board.get_state() in self.states:
-            legal_actions = []
+            """
+             legal_actions = []
             for move in board.get_legal_moves():
                 if board.check_legal_move(move):
                     legal_actions.append(move)
             if not legal_actions:
                 break
-            action = self.select_action(board, legal_actions)
+            """
+            action = self.select_action(board, board.player)
             sequence.append((board.get_state(), action))
             board.make_move(action)
         return sequence

@@ -16,13 +16,13 @@ class Parameters:
         self.optimizer = "adam"
         self.train_ANET = True
         # With sigma=1.5 and decay=0.97, first chance of critic eval is at episode 14
-        self.sigma = 2
-        self.sigma_decay = 1
+        self.sigma = 0.5
+        self.sigma_decay = 0.97
         # TOPP parameters
-        self.number_of_ANET = 5 # + 1 for episode 0
-        self.topp = False
+        self.number_of_ANET = 2 # + 1 for episode 0
+        self.topp = True
         self.topp_games = 10
-        self.visualize_last_game = True
+        self.visualize_last_game = False
         
 
 

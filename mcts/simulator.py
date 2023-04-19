@@ -42,10 +42,9 @@ class Simulator:
 
         for i in range(max(num_simulations_dynamic, 10)): 
             seq = self.tree_search(board_copy)
-            seq.reverse()
             self.tree.expand_tree(board_copy)
             reward = self.rollout_game(sigma, epsilon, board_copy)
-           
+            seq.reverse()
             for val in seq: 
                 self.tree.update(val[0], val[1], reward)
             board_copy = self.board.copy()

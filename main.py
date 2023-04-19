@@ -96,7 +96,7 @@ def run_and_save_model(save_interval):
     epsilon = p.epsilon
     for game in range(p.number_of_games): 
         if game % save_interval == 0:
-            nn.save_model(f"{p.board_size}x{p.board_size}_episode_", game)
+            nn.save_model(f"{p.board_size}x{p.board_size}_episode", game)
         print("Game number: ", str(game+1))
         if p.starting_player == None: 
             player = game % 2 + 1
