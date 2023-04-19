@@ -7,17 +7,33 @@ from game.board_visualizer import BoardVisualizer
 from mcts.simulator import Simulator
 from mcts.MonteCarloTreeSearch import MCTS
 
-
+#Initialize the necceasry objects and parameters from the different classes
 p = Parameters()
-# Initialize save interval, RBUF, ANET and board (state manager)
-save_interval = p.number_of_games // p.number_of_ANET
-rbuf = RBUF()
-nn = NeuralNet(p.nn_dims, p.board_size, p.lr, p.activation_function, p.optimizer)
 board = Board(p.board_size, p.starting_player)
 board_visualizer = BoardVisualizer()
+nn = NeuralNet(p.nn_dims, p.board_size, p.lr, p.activation_function, p.optimizer)
 tree = MCTS(board.get_state(), nn)
-sim = Simulator(board, p.board_size, p.starting_player, tree)
+s = Simulator(board, p.board_size, p.starting_player, tree)
 topp = Topp()
+rbuf = RBUF()
+
+#Save interval for ANET (i.e  if p.number_of_games is 1000 and p.number_of_ANET is 10, then the model will be saved every 100 games.) 
+save_interval = p.number_of_games // p.number_of_ANET
+
+
+def run_game(eps, sig, starting_player):
+    board.initialize_board(starting_player)
+    while not board.check_winning_state(): 
+        tree.root = board.get_state()
+        s.initialize_root(tree.root, board.player)
+        D,Q = s.simulate(sigma=sig, epsilon=eps, num_search_games= p.number_search_episodes_for_each_move)
+        D = check_for_winning_move(board, D)
+        current_player = str(board.player)
+        state_str = current_player + " " + tree.root
+
+        
+        #best_move = get_best_move_from_D(D)
+        
 
 def run_full_game(epsilon, sigma, starting_player):
     # Starting state
@@ -25,9 +41,9 @@ def run_full_game(epsilon, sigma, starting_player):
     while not board.check_winning_state():
         # Initialize simulations
         tree.root = board.get_state()
-        sim.initialize_root(tree.root, board.player)
+        s.initialize_root(tree.root, board.player)
         # Return distribution
-        D, Q = sim.simulate(sigma, epsilon, p.number_of_search_episodes)
+        D, Q = s.simulate(sigma, epsilon, p.number_of_search_episodes)
         D = check_for_winning_move(board, D)
         # Parse to state representation
         s = str(board.player) + " " + tree.root
@@ -36,7 +52,7 @@ def run_full_game(epsilon, sigma, starting_player):
         # Add to replay buffer
         rbuf.add((s, D, Q))
         board.make_move(next_move)
-        sim.reset(board.player)
+        s.reset(board.player)
     tree.reset()
     # Reset memoization of visited states during rollouts
     nn.fit(rbuf.get_random_batch(p.batch_size))
@@ -71,7 +87,7 @@ def check_for_winning_move(board, D):
 
 if __name__ == "__main__":
     if (p.topp):
-        episodes = [i*save_interval for i in range(p.number_of_cached_anet +1)]
+        episodes = [i*save_interval for i in range(p.number_of_ANET +1)]
         actors = [NeuralNet(board_size=p.board_size, load_saved_model=True, episode_number=i) for i in episodes]
         topp.tournament(board, episodes, actors, p.topp_games, board_visualizer, display_last_game=p.visualize_last_game)
     else:

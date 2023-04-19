@@ -5,7 +5,7 @@ class Parameters:
         self.starting_player = None #0 for mix
         # MCTS parameters
         self.number_of_games = 200
-        self.number_of_search_episodes = 500
+        self.number_search_episodes_for_each_move = 500
         self.epsilon = 1
         self.epsilon_decay = 0.98
         # ANET parameters

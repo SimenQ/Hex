@@ -36,9 +36,9 @@ class Simulator:
             return []
         return traversal_seq
     
-    def simulate(self, sigma, epsilon, num_search_games):
+    def simulate(self, sigma, epsilon, num_search):
         board_copy = self.board.copy()
-        num_simulations_dynamic = int(num_search_games / len(board_copy.get_legal_moves()))
+        num_simulations_dynamic = int(num_search / len(board_copy.get_legal_moves()))
 
         for i in range(max(num_simulations_dynamic, 10)): 
             seq = self.tree_search(board_copy)
