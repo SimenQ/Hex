@@ -128,7 +128,7 @@ class NeuralNet:
         print("%s%s saved" % (model_name, episode_number))
 
     def load_saved_model(self, episode_number):
-        model_path = "models/%sx%s_ep%s.h5" % (self.board_size, self.board_size, episode_number)
+        model_path = "models/%sx%s_episode%s.h5" % (self.board_size, self.board_size, episode_number)
         loaded_model = ks.models.load_model(model_path, compile=False)
         print("%sx%s_ep%s loaded" % (self.board_size, self.board_size, episode_number))
         return loaded_model
