@@ -127,4 +127,4 @@ class Board:
         if (self.check_winning_state(player)):
             return 1
         else:
-            return -1
+            return -10

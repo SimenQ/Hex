@@ -81,7 +81,7 @@ if __name__ == "__main__":
             if game % save_interval == 0:
                 nn.save_model(f"{p.board_size}x{p.board_size}_ep", game)
             print("Game no. " + str(game+1))
-            run_full_game(epsilon, sigma, game % 2 + 1 if p.starting_player==0 else p.starting_player)
+            run_full_game(epsilon, sigma, game % 2 + 1 if p.starting_player==None else p.starting_player)
             epsilon *= p.epsilon_decay
             sigma *= p.sigma_decay
         nn.save_model(f"{p.board_size}x{p.board_size}_ep", p.number_of_games)

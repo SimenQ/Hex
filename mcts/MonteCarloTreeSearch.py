@@ -79,11 +79,11 @@ class MCTS:
         random_number = random.random()
         if random_number > epsilon:
             current_state = board.get_state()
-            split_state = [player]
+            split_values = [player]
             for i in current_state.split():
-                split_state.append(int(i))
-            split_state = np.array([split_state])
-            preds = self.neural_net.predict(split_state)
+                split_values.append(int(i))
+            split_values = np.array([split_values])
+            preds = self.neural_net.predict(split_values)
             return self.neural_net.best_action(preds[0])
         else: 
             return self.random_action(board)
@@ -92,11 +92,11 @@ class MCTS:
     #Returns the predicted value of the current board state
     def critic(self, board, player):
         current_state = board.get_state()
-        split_state = [player]
+        split_values = [player]
         for i in current_state.split():
-            split_state.append(int(i))
-        split_state = np.array([split_state])
-        preds = self.nn.predict(split_state)
+            split_values.append(int(i))
+        split_values = np.array([split_values])
+        preds = self.nn.predict(split_values)
         return preds[1][0][0]
 
 
