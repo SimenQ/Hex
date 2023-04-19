@@ -18,8 +18,8 @@ class MCTS:
         self.state_action[(state, action)]["N"] += 1
         self.state_action[(state, action)]["Q"] += (reward - self.get_Q(state, action)) / (1 + self.get_N(state, action))
 
-        self.state[state]["N"] += 1
-        self.state[state]["Q"] += (reward - self.get_Q(state)) / (1 + self.get_N(state))
+        self.states[state]["N"] += 1
+        self.states[state]["Q"] += (reward - self.get_Q(state)) / (1 + self.get_N(state))
 
         return
 
@@ -41,7 +41,7 @@ class MCTS:
     def get_Q(self, state, action=None):
         if action:
             return self.state_action[(state, action)]["Q"]
-        return self.state[state]["Q"]
+        return self.states[state]["Q"]
 
     def exploration_bonus(self, state, action):
         if self.get_N(state) == 0:
@@ -61,10 +61,10 @@ class MCTS:
         current_state = board.get_state()
         N_values = []
         for move in all_moves: 
-            N_values = self.get_N(current_state, move)
-            N_values.append(N_values)
+            value = self.get_N(current_state, move)
+            N_values.append(value)
         
-        normalized_N_values = NeuralNet.normilize(np.array(N_values))
+        normalized_N_values = NeuralNet.normalize(np.array(N_values))
 
         move_probs = []
         for i in range(len(all_moves)):
@@ -83,8 +83,8 @@ class MCTS:
             for i in current_state.split():
                 split_state.append(int(i))
             split_state = np.array([split_state])
-            preds = self.nn.predict(split_state)
-            return self.nn.best_action(preds[0])
+            preds = self.neural_net.predict(split_state)
+            return self.neural_net.best_action(preds[0])
         else: 
             return self.random_action(board)
 
@@ -104,26 +104,26 @@ class MCTS:
         return random.choice(board.get_legal_moves())
 
     def expand_tree(self, board):
-       if board.check_winning_state():
-        return
-       
-       current_state = board.get_state()
-       actions = board.get_legal_moves()
-       if current_state not in self.state:
-        self.state[current_state] = {"N": 0, "Q": 0}
-       for action in actions: 
-        if(current_state,action) not in self.state_action:
-            self.state_action[(current_state,action)] = {"N": 0, "Q": 0}
-
+        if board.check_winning_state():
+            return
+        current_state = board.get_state()
+        actions = board.get_legal_moves()
+        for action in actions: 
+            if(current_state,action) not in self.state_action:
+                self.state_action[(current_state,action)] = {"N": 0, "Q": 0}
+        if current_state not in self.states:
+            self.states[current_state] = {"N": 0, "Q": 0}
+      
 
     def select_action(self, board, player):
+        current_state = board.get_state()
         actions = board.get_legal_moves()
         for action in actions: 
             if (player == 1):
-                action_value = [self.get_Q(board,action) + self.exploration_bonus(board,action)]
+                action_value = [self.get_Q(current_state,action) + self.exploration_bonus(current_state,action)]
                 action_index = action_value.index(max(action_value))
             else:  
-                action_value = [self.get_Q(board,action) - self.exploration_bonus(board,action)]
+                action_value = [self.get_Q(current_state,action) - self.exploration_bonus(current_state,action)]
                 action_index = action_value.index(min(action_value))
         
         return actions[action_index]

@@ -90,7 +90,7 @@ class NeuralNet:
             actor_target_value = D[0][1]
             actor_target_data.append(actor_target_value)
         actor_target_data = np.array(actor_target_data)
-        ccritic_target_data = []
+        critic_target_data = []
         for _, _, Q in batch:
             critic_target_value = Q
             critic_target_data.append(critic_target_value)

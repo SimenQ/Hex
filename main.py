@@ -41,14 +41,14 @@ def run_full_game(epsilon, sigma, starting_player):
     # Reset memoization of visited states during rollouts
     nn.fit(rbuf.get_random_batch(p.batch_size))
 
-    def get_best_move_from_D(D):
-        best_move = None
-        most_visits = -1
-        for d in D:
-            if (d[1] > most_visits):
-                best_move = d[0]
-                most_visits = d[1]
-        return best_move
+def get_best_move_from_D(D):
+    best_move = None
+    most_visits = -1
+    for d in D:
+        if (d[1] > most_visits):
+            best_move = d[0]
+            most_visits = d[1]
+    return best_move
 
 def check_for_winning_move(board, D):
     for i, el in enumerate(D):
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     if (p.topp):
         episodes = [i*save_interval for i in range(p.number_of_cached_anet +1)]
         actors = [NeuralNet(board_size=p.board_size, load_saved_model=True, episode_number=i) for i in episodes]
-        topp.tournament(board, episodes, actors, p.topp_games, board_visualizer, visualize_last_game=p.visualize_last_game)
+        topp.tournament(board, episodes, actors, p.topp_games, board_visualizer, display_last_game=p.visualize_last_game)
     else:
         epsilon = p.epsilon
         sigma = p.sigma

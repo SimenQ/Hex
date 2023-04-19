@@ -4,9 +4,9 @@ import numpy as np
 
 
 class Topp:
-    
+
     def game(self, board, player_1, player_2, starting_player, board_visulazier, display = True): 
-        board.initilize_board(starting_player)
+        board.initialize_board(starting_player)
         if starting_player == 1: 
             player = player_1
         else:
@@ -15,7 +15,7 @@ class Topp:
         num_moves = 0
         
         if display: 
-            display_game(board,board_visulazier)
+            Topp.display_game(board,board_visulazier)
 
         while not board.check_winning_state():
             current_state = board.get_state()
@@ -29,7 +29,7 @@ class Topp:
             num_moves += int(starting_player == 1)
             starting_player = starting_player % 2 + 1
             if display: 
-                display_game(board, board_visulazier)
+                Topp.display_game(board, board_visulazier)
                     
         if board.check_winning_state(1): 
             player_won = 1 
@@ -39,7 +39,7 @@ class Topp:
         #print("Player ", player_won, "won! with", num_moves," number moves")
 
         if display: 
-            display_game(board, board_visulazier)
+            Topp.display_game(board, board_visulazier)
         return player_won
     
     def tournament(self, board, episodes, models, games, board_visulazier , display_last_game = True):
@@ -58,11 +58,12 @@ class Topp:
                         num_wins_player_2 += 1
                     else: 
                         pass
-                print("Model trained with (Episode = " + str(episodes[i]) + " won", num_wins_player_1, "times, as starting player")
-                print("Model trained with (Episode = : " + str(episodes[j]) + " won", num_wins_player_2, "times as second player")  
+                print("Model trained with (Episode = " + str(episodes[i]) + ") won", num_wins_player_1, "times, as starting player")
+                print("Model trained with (Episode =  " + str(episodes[j]) + ") won", num_wins_player_2, "times as second player")  
+                print("\n")
                 won_games[i] += num_wins_player_1
 
-        for i in range(len(models), -1, -1): 
+        for i in range(len(models) - 1, -1, -1): 
             for j in range(i-1, -1, -1):
                 num_wins_player_1 = 0
                 num_wins_player_2 = 0
@@ -82,13 +83,13 @@ class Topp:
         print("-------------------------------------------------------------------------------------------------------------")
         print("Final scores")
         for i in range(len(episodes)): 
-            print("Model trained with (Episode = " + str(episodes[i]) + " won", won_games[i], "times, as starting player")
+            print("Model trained with (Episode = " + str(episodes[i]) + ") won", won_games[i], "times, as starting player")
         print("-------------------------------------------------------------------------------------------------------------")
            
         
     
 
-@staticmethod
-def display_game(board, board_visulazier): 
-    board_visulazier.draw_board(board.board)
-    time.sleep(0.5)
+    @staticmethod
+    def display_game(board, board_visulazier): 
+        board_visulazier.draw_board(board.board)
+        time.sleep(0.5)

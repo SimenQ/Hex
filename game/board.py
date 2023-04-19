@@ -46,10 +46,10 @@ class Board:
     
     def check_legal_move(self, move):
         try:
-            self.board[move[0]][move[1]] == 0
+           return self.board[move[0]][move[1]] == 0
         except IndexError:
             return False
-
+    
     def make_move(self, move, player=None):
         if player:
             current_player = player
@@ -58,15 +58,14 @@ class Board:
 
         if not self.check_legal_move(move):
             raise Exception(
-                f"Illegal move provided: {move} {self.get_1D_representation_of_board()}")
+                f"Illegal move provided: {move} {self.board.flatten()}")
 
         if current_player not in [1, 2]:
             raise Exception("Player must be either 1 or 2")
 
         self.board[move[0]][move[1]] = current_player
         self.player = current_player % 2 + 1
-
-
+    
     def check_winning_state(self, player=None):
         """Checks if the given player or both players have won the game by connecting their pieces
         from one edge of the board to the opposite edge.
@@ -112,6 +111,15 @@ class Board:
                 return True
 
         return False
+    
+    def get_neighbors(self, cell):
+        row, col = cell
+        neighbors = []
+        for i in range(max(0, row - 1), min(row + 2, self.board_size)):
+            for j in range(max(0, col - 1), min(col + 2, self.board_size)):
+                if (i, j) != (row, col):
+                    neighbors.append((i, j))
+        return neighbors
 
     # Can be modified or removed depening on how we want to implemnt the reward for the agent.
     # Adding this simple reward function for testing

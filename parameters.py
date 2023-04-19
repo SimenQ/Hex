@@ -19,7 +19,7 @@ class Parameters:
         self.sigma_decay = 1
         # TOPP parameters
         self.number_of_cached_anet = 20 # + 1 for episode 0
-        self.topp = False
+        self.topp = True
         self.topp_games = 4
         self.visualize_last_game = False
         

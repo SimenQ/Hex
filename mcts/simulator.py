@@ -39,7 +39,7 @@ class Simulator:
     def simulate(self, sigma, epsilon, num_search_games):
         board_copy = self.board.copy()
         num_simulations = int(num_search_games / len(board_copy.get_legal_moves()))
-        
+
         for i in range(max(num_simulations, 10)): 
             seq = self.tree_search(board_copy)
             seq.reverse()
@@ -49,7 +49,7 @@ class Simulator:
             for val in seq: 
                 self.tree.update(val[0], val[1], reward)
             board_copy = self.board.copy()
-        return self.tree.get_distribution(self.bord)
+        return self.tree.get_distribution(self.board)
 
     def reset(self, player): 
         self.board = Board(self.board_size, player)
