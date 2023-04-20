@@ -7,13 +7,9 @@ class Topp:
 
     def game(self, board, player_1, player_2, starting_player, board_visulazier, display = True): 
         board.initialize_board(starting_player)
-        if starting_player == 1: 
-            player = player_1
-        else:
-            player = player_2
-
-        num_moves = 0
         
+        num_moves = 0
+        current_player = [player_1, player_2]
         if display: 
             Topp.display_game(board,board_visulazier)
 
@@ -23,15 +19,16 @@ class Topp:
             for i in current_state.split():
                 split_values.append(int(i))
             split_values = np.array([split_values])
-            preds = player.predict(split_values)[0]
-            move = player.best_action(preds)
+            preds = current_player [starting_player-1].predict(split_values)[0]
+            move = current_player [starting_player-1].best_action(preds)
             board.make_move(move)
             num_moves += int(starting_player == 1)
             starting_player = starting_player % 2 + 1
+           
             if display: 
                 Topp.display_game(board, board_visulazier)
                     
-        if board.check_winning_state(1): 
+        if board.check_winning_state_player_one(): 
             player_won = 1 
         else: 
             player_won = 2

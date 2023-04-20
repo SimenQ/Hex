@@ -103,7 +103,10 @@ class MCTS:
 
 
     def random_action(self, board):
-        return random.choice(board.get_legal_moves())
+        legal_moves = board.get_legal_moves()
+        if not legal_moves:
+            raise ValueError("No legal moves available")
+        return random.choice(legal_moves)
 
     def expand_tree(self, board):
         if board.check_winning_state():
@@ -116,25 +119,52 @@ class MCTS:
         if current_state not in self.states:
             self.states[current_state] = {"N": 0, "Q": 0}
       
-
+    """
     def select_action(self, board, player):
         current_state = board.get_state()
         actions = board.get_legal_moves()
+        optimal_action_value = 0
         for action in actions: 
             if (player == 1):
                 action_value = [self.get_Q(current_state,action) + self.exploration_bonus(current_state,action)]
-                action_index = action_value.index(max(action_value))
+                optimal_action_value = max(action_value,optimal_action_value)
+                action_index = action_value.index(optimal_action_value)
+                
             else:  
                 action_value = [self.get_Q(current_state,action) - self.exploration_bonus(current_state,action)]
-                action_index = action_value.index(min(action_value))
+                optimal_action_value = min(action_value,optimal_action_value)
+                action_index = action_value.index(action_value)
         
         return actions[action_index]
+    """
+    
+    def select_action(self, board, player):
+        current_state = board.get_state()
+        actions = board.get_legal_moves()
+
+        # Initialize the optimal action index and value
+        optimal_action_index = 0
+        optimal_action_value = float('-inf') if player == 1 else float('inf')
+
+        # Loop over all legal actions to find the one with the highest/lowest Q-value
+        for i, action in enumerate(actions):
+            action_value = self.get_Q(current_state, action) + self.exploration_bonus(current_state, action) if player == 1 \
+                            else self.get_Q(current_state, action) - self.exploration_bonus(current_state, action)
+            if player == 1 and action_value > optimal_action_value:
+                optimal_action_value = action_value
+                optimal_action_index = i
+            elif player == 2 and action_value < optimal_action_value:
+                optimal_action_value = action_value
+                optimal_action_index = i
+
+        return actions[optimal_action_index]
+
             
     def traverse(self, board):
         sequence = []
         while not board.check_winning_state() and board.get_state() in self.states:
             """
-             legal_actions = []
+            legal_actions = []
             for move in board.get_legal_moves():
                 if board.check_legal_move(move):
                     legal_actions.append(move)
