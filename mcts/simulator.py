@@ -24,11 +24,10 @@ class Simulator:
     def rollout_game(self, sigma, epsilon, board_copy): 
         if sigma < random.random(): 
             return self.tree.critic(board_copy, board_copy.player)
-        while True: 
+        while not board_copy.check_winning_state(): 
             next_move = self.tree.rollout(board_copy, epsilon, board_copy.player)
             board_copy.make_move(next_move)
-            if board_copy.check_winning_state():
-                return board_copy.get_reward()
+        return board_copy.get_reward(1)
   
     def tree_search(self, board_copy):
         traversal_seq = self.tree.traverse(board_copy)

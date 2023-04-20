@@ -118,25 +118,7 @@ class MCTS:
                 self.state_action[(current_state,action)] = {"N": 0, "Q": 0}
         if current_state not in self.states:
             self.states[current_state] = {"N": 0, "Q": 0}
-      
-    """
-    def select_action(self, board, player):
-        current_state = board.get_state()
-        actions = board.get_legal_moves()
-        optimal_action_value = 0
-        for action in actions: 
-            if (player == 1):
-                action_value = [self.get_Q(current_state,action) + self.exploration_bonus(current_state,action)]
-                optimal_action_value = max(action_value,optimal_action_value)
-                action_index = action_value.index(optimal_action_value)
-                
-            else:  
-                action_value = [self.get_Q(current_state,action) - self.exploration_bonus(current_state,action)]
-                optimal_action_value = min(action_value,optimal_action_value)
-                action_index = action_value.index(action_value)
-        
-        return actions[action_index]
-    """
+
     
     def select_action(self, board, player):
         current_state = board.get_state()
