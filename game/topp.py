@@ -12,7 +12,7 @@ class Topp:
         current_player = [player_1, player_2]
         if display: 
             Topp.display_game(board,board_visulazier)
-
+        winning_state = None
         while not board.check_winning_state():
             current_state = board.get_state()
             split_values = [starting_player]
@@ -28,7 +28,7 @@ class Topp:
             if display: 
                 Topp.display_game(board, board_visulazier)
                     
-        if board.check_winning_state_player_one(): 
+        if board.check_winning_state(1): 
             player_won = 1 
         else: 
             player_won = 2
@@ -56,34 +56,17 @@ class Topp:
                         num_wins_player_2 += 1
                     else: 
                         pass
-                print("Model trained with (Episode = " + str(episodes[i]) + ") won", num_wins_player_1, "times, as starting player")
-                print("Model trained with (Episode =  " + str(episodes[j]) + ") won", num_wins_player_2, "times as second player")  
+                #print("Model trained with (Episode = " + str(episodes[i]) + ") won", num_wins_player_1, "times, as starting player")
+               # print("Model trained with (Episode =  " + str(episodes[j]) + ") won", num_wins_player_2, "times as second player")  
                 print("\n")
                 won_games[i] += num_wins_player_1
-
-        for i in range(len(models) - 1, -1, -1): 
-            for j in range(i-1, -1, -1):
-                num_wins_player_1 = 0
-                num_wins_player_2 = 0
-                print("Model (Episode: " + str(episodes[i]) + ") vs. Model (Episode: " + str(episodes[j]) + ")")
-                for g in range(games): 
-                    winner = self.game(board, models[i], models[j], g % 2 + 1, board_visulazier, display = display_last_game and g == games -1 )
-                    if winner == 1: 
-                        num_wins_player_1 += 1
-                    elif winner == 2: 
-                        num_wins_player_2 += 1
-                    else: 
-                        pass
-                print("Model trained with (Episode = " + str(episodes[i]) + " won", num_wins_player_1, "times, as starting player")
-                print("Model trained with (Episode = : " + str(episodes[j]) + " won", num_wins_player_2, "times as second player")  
-                print("\n")
-                won_games[i] += num_wins_player_1
-
         print("-------------------------------------------------------------------------------------------------------------")
         print("Final scores")
         print("\n")
+        #inverse the won games list
+        won_games = won_games[::-1]
         for i in range(len(episodes)): 
-            print("Model trained with (Episode = " + str(episodes[i]) + ") won", won_games[i], "times, as starting player")
+            print("Model trained with (Episode = " + str(episodes[i]) + ") won", won_games[i], "")
         print("-------------------------------------------------------------------------------------------------------------")
            
         

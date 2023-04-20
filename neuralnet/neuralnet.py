@@ -99,6 +99,7 @@ class NeuralNet:
                     "critic_output": critic_target_data}
         self.model.fit(input_data, target_data, verbose=1, batch_size=64)
 
+
     def predict(self, input_data):
         model_predictions = self.model(input_data)
         prediction_length = len(model_predictions[0])
