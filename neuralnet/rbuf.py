@@ -2,6 +2,7 @@ from typing import Deque
 import numpy as np
 import random
 
+
 class RBUF:
 
     def __init__(self, max_size=1000000):

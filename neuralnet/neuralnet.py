@@ -1,6 +1,7 @@
 from tensorflow import keras as ks
 import tensorflow as tf
 import numpy as np
+from accuracy import PlotAccuracyAndSaveModelCallback as AP
 
 class NeuralNet:
     def __init__(
@@ -13,6 +14,7 @@ class NeuralNet:
         load_saved_model=False,
         episode_number=0,
         long = False
+        
     ):
         self.board_size = board_size
         if load_saved_model:
@@ -28,7 +30,7 @@ class NeuralNet:
             )
         self.topp = load_saved_model
 
-
+    
     def init_model(self, neural_network_dimensions, board_size, learning_rate, activation_functions, optimizer_name):
         # Get activation functions for actor and critic
         actor_activation_function = activation_function.get(activation_functions[0])
@@ -98,7 +100,7 @@ class NeuralNet:
         critic_target_data = np.array(critic_target_data)
         target_data = {"actor_output": actor_target_data,
                     "critic_output": critic_target_data}
-        self.model.fit(input_data, target_data, verbose=1, batch_size=64)
+        self.model.fit(input_data, target_data, verbose=1, batch_size=64,callbacks=[AP()])
 
 
     def predict(self, input_data):
