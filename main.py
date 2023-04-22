@@ -6,7 +6,8 @@ from mcts.MonteCarloTreeSearch import MCTS
 from mcts.simulator import Simulator
 from neuralnet.neuralnet import NeuralNet
 from neuralnet.rbuf import RBUF
-from neuralnet.accuracy import PlotAccuracyAndSaveModelCallback as AP
+import sys
+sys.path.append('/Users/simenvoldqvam/Desktop/Skole/4år/Andresemester/AI_prog/Hex/neuralnet')
 
 #Initialize the necceasry objects and parameters from the different classes
 p = Parameters()

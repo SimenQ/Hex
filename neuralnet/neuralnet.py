@@ -1,7 +1,8 @@
 from tensorflow import keras as ks
 import tensorflow as tf
 import numpy as np
-from accuracy import PlotAccuracyAndSaveModelCallback as AP
+import matplotlib.pyplot as plt
+from keras.callbacks import Callback
 
 class NeuralNet:
     def __init__(
@@ -100,7 +101,7 @@ class NeuralNet:
         critic_target_data = np.array(critic_target_data)
         target_data = {"actor_output": actor_target_data,
                     "critic_output": critic_target_data}
-        self.model.fit(input_data, target_data, verbose=1, batch_size=64,callbacks=[AP()])
+        self.model.fit(input_data, target_data, verbose=1, batch_size=64)
 
 
     def predict(self, input_data):
