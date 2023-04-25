@@ -1,5 +1,3 @@
-import sys
-sys.path.append('/Users/simenvoldqvam/Desktop/Skole/4år/Andresemester/AI_prog/Hex')
 
 from parameters import Parameters
 from game.board import Board
@@ -9,10 +7,7 @@ from mcts.MonteCarloTreeSearch import MCTS
 from mcts.simulator import Simulator
 from neuralnet.neuralnet import NeuralNet
 from neuralnet.rbuf import RBUF
-import sys
-sys.path.append('/Users/simenvoldqvam/Desktop/Skole/4år/Andresemester/AI_prog/Hex/ClientSide')
-from hto.play_online import MyClient
-from hto.ActorClient import ActorClient
+from ClientSide.play_online import MyClient
 
 
 

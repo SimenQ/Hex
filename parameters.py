@@ -4,7 +4,7 @@ class Parameters:
         self.board_size = 7
         self.starting_player = None #0 for mix
         # MCTS parameters
-        self.number_of_games = 20
+        self.number_of_games = 50
         self.number_search_episodes_for_each_move = 500
         self.epsilon = 1
         self.epsilon_decay = 0.985
@@ -20,11 +20,11 @@ class Parameters:
         self.sigma_decay = 0.97
         # TOPP parameters
         self.number_of_ANET = 5 # + 1 for episode 0
-        self.topp = False
+        self.topp = True
         self.topp_games = 25
         self.visualize_last_game = False
         #OHT paramaters
-        self.oht = True
+        self.oht = False
         self.oht_episode = "20"
         self.auth = "76690f8e34e04520a42f336a2b5496aa"
         self.qualify = "No"

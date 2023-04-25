@@ -42,7 +42,10 @@ class Topp:
     
     def tournament(self, board, episodes, models, games, board_visulazier , display_last_game = True):
         #list over number of games won by player 1 (or both) player
-        won_games = [0] * len(episodes)
+        #created empty dict called won games 
+        won_games = {}
+        for i in range(len(episodes)): 
+            won_games[str(episodes[i])] = 0
         for i in range(len(models)): 
             for j in range(i+1, len(models)): 
                 num_wins_player_1 = 0
@@ -51,20 +54,21 @@ class Topp:
                 for g in range(games): 
                     winner = self.game(board, models[i], models[j], g % 2 + 1, board_visulazier, display = display_last_game and g == games -1 )
                     if winner == 1: 
-                        num_wins_player_1 += 1
+                        num_wins_player_1 +=1 
+                        won_games[str(episodes[i])] += 1
                     elif winner == 2: 
+                        won_games[str(episodes[j])] += 1
                         num_wins_player_2 += 1
                     else: 
                         pass
                 print("Model trained with (Episode = " + str(episodes[i]) + ") won", num_wins_player_1, "times")
                 print("Model trained with (Episode =  " + str(episodes[j]) + ") won", num_wins_player_2, "times")  
                 print("\n")
-                won_games[i] += num_wins_player_1
         print("-------------------------------------------------------------------------------------------------------------")
         print("Final scores")
         print("\n")
         for i in range(len(episodes)): 
-            print("Model trained with (Episode = " + str(episodes[i]) + ") won", won_games[i], "")
+            print("Model trained with (Episode = " + str(episodes[i]) + ") won", won_games[str(episodes[i])], "")
         print("-------------------------------------------------------------------------------------------------------------")
            
 
