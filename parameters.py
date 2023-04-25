@@ -26,7 +26,7 @@ class Parameters:
         #OHT paramaters
         self.oht = True
         self.oht_episode = "20"
-        self.auth = "2d7ef0e694bf49e2b6dc4f55d6a3c5ef"
+        self.auth = "76690f8e34e04520a42f336a2b5496aa"
         self.qualify = "No"
 
 
