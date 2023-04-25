@@ -4,10 +4,12 @@ from neuralnet.neuralnet import NeuralNet
 from ClientSide.ActorClient import ActorClient
 
 class MyClient(ActorClient): 
-    def __init__(self, auth=..., qualify=..., episode_number =...):
-        super().__init__(auth, qualify)
+    
+    def __init__(self, auth, qualify, episode_number):
         self.episode_number = episode_number
-
+        ActorClient.__init__(self, auth = auth, qualify = qualify)
+        
+    
     def set_actor(self, actor):
         self.actor = actor
 
@@ -75,8 +77,8 @@ class MyClient(ActorClient):
         """
         self.logger.info('Get action: state=%s', state)
         preds = self.actor.predict(np.array([state]))[0]
-        next_move = self.actor.best_action(preds)
-        return next_move
+        next_move = self.actor.best_action(preds, random = False)
+        return int(next_move[0]), int(next_move[1])
     
     def handle_game_over(self, winner, end_state):
         """Called after each game

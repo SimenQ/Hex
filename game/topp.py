@@ -67,8 +67,6 @@ class Topp:
             print("Model trained with (Episode = " + str(episodes[i]) + ") won", won_games[i], "")
         print("-------------------------------------------------------------------------------------------------------------")
            
-        
-    
 
     @staticmethod
     def display_game(board, board_visulazier): 

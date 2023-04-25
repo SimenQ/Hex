@@ -121,14 +121,14 @@ def run_topp(save_interval):
     topp.tournament(board, episodes, models, p.topp_games, board_visualizer, display_last_game=p.visualize_last_game)
 
 
-if __name__ == "__main__":
-    if(p.train_ANET and not p.topp):
+if __name__ == "__main__":i
+    if (p.oht): 
+        bsa = MyClient(p.auth, p.qualify, p.oht_episode)
+        bsa.run()
+    elif(p.train_ANET and not p.topp):
         run_and_save_model(save_interval)
     elif (p.topp and not p.train_ANET):
-        run_topp(save_interval)
-    #elif (p.oht and not p.train_ANET and not p.topp):
-        #bsa = MyClient(p.oht_episode)
-        #bsa.run()
+        run_topp(save_interval) 
     else: 
         run_and_save_model(save_interval)
         run_topp(save_interval)
