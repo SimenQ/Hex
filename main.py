@@ -6,6 +6,7 @@ from mcts.MonteCarloTreeSearch import MCTS
 from mcts.simulator import Simulator
 from neuralnet.neuralnet import NeuralNet
 from neuralnet.rbuf import RBUF
+from ClientSide.play_online import MyClient
 
 #Initialize the necceasry objects and parameters from the different classes
 p = Parameters()
@@ -125,8 +126,12 @@ if __name__ == "__main__":
         run_and_save_model(save_interval)
     elif (p.topp and not p.train_ANET):
         run_topp(save_interval)
+    #elif (p.oht and not p.train_ANET and not p.topp):
+        #bsa = MyClient(p.oht_episode)
+        #bsa.run()
     else: 
         run_and_save_model(save_interval)
         run_topp(save_interval)
        
+    
     

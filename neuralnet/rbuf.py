@@ -13,9 +13,6 @@ class RBUF:
         #make get halv the buffer elements
         get = int(len(self.buffer) / 2)
 
-
-        
-
         if batch_size > len(self.buffer):
             return self.buffer
 

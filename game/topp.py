@@ -12,7 +12,6 @@ class Topp:
         current_player = [player_1, player_2]
         if display: 
             Topp.display_game(board,board_visulazier)
-        winning_state = None
         while not board.check_winning_state():
             current_state = board.get_state()
             split_values = [starting_player]
@@ -56,8 +55,8 @@ class Topp:
                         num_wins_player_2 += 1
                     else: 
                         pass
-                #print("Model trained with (Episode = " + str(episodes[i]) + ") won", num_wins_player_1, "times, as starting player")
-               # print("Model trained with (Episode =  " + str(episodes[j]) + ") won", num_wins_player_2, "times as second player")  
+                print("Model trained with (Episode = " + str(episodes[i]) + ") won", num_wins_player_1, "times, as starting player")
+                print("Model trained with (Episode =  " + str(episodes[j]) + ") won", num_wins_player_2, "times as second player")  
                 print("\n")
                 won_games[i] += num_wins_player_1
         print("-------------------------------------------------------------------------------------------------------------")

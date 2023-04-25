@@ -1,3 +1,4 @@
+
 from tensorflow import keras as ks
 import tensorflow as tf
 import numpy as np
@@ -12,15 +13,15 @@ class NeuralNet:
         optimizer_name="adam",
         load_saved_model=False,
         episode_number=0,
-        long = False
+
     ):
         self.board_size = board_size
         if load_saved_model:
             try:
-                self.model = self.load_saved_model(episode_number,long)
+                self.model = self.load_saved_model(episode_number)
             except OSError:
                 raise ValueError(
-                    f"Failed to load model named {self.board_size}x{self.board_size}_ep{episode_number}. Did you provide the correct episode number?"
+                    f"Failed to load model named {self.board_size}x{self.board_size}_episode{episode_number}. Did you provide the correct episode number?"
                 )
         else:
             self.model = self.init_model(
@@ -129,11 +130,8 @@ class NeuralNet:
         self.model.save(model_path)
         print("%s%s saved" % (model_name, episode_number))
 
-    def load_saved_model(self, episode_number,long=False):
-        if long:
-            model_path = "models_long/%sx%s_episode%s.h5" % (self.board_size, self.board_size, episode_number)
-        else:
-            model_path = "models/%sx%s_episode%s.h5" % (self.board_size, self.board_size, episode_number)
+    def load_saved_model(self, episode_number):
+        model_path = "models/%sx%s_episode%s.h5" % (self.board_size, self.board_size, episode_number)
         loaded_model = ks.models.load_model(model_path, compile=False)
         print("%sx%s_episode%s loaded" % (self.board_size, self.board_size, episode_number))
         return loaded_model
@@ -151,8 +149,6 @@ class NeuralNet:
         if array_sum == 0:
             return array
         return array / array_sum
-
-
     
 # Static values used to select activation function
 activation_function = {
