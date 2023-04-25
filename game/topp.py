@@ -19,7 +19,8 @@ class Topp:
                 split_values.append(int(i))
             split_values = np.array([split_values])
             preds = current_player [starting_player-1].predict(split_values)[0]
-            move = current_player [starting_player-1].best_action(preds)
+            #move = np.random.choice(board.board_size**2, 1, p = preds[0]) 
+            move = current_player [starting_player-1].best_action(preds, random=True)
             board.make_move(move)
             num_moves += int(starting_player == 1)
             starting_player = starting_player % 2 + 1
@@ -55,15 +56,13 @@ class Topp:
                         num_wins_player_2 += 1
                     else: 
                         pass
-                print("Model trained with (Episode = " + str(episodes[i]) + ") won", num_wins_player_1, "times, as starting player")
-                print("Model trained with (Episode =  " + str(episodes[j]) + ") won", num_wins_player_2, "times as second player")  
+                print("Model trained with (Episode = " + str(episodes[i]) + ") won", num_wins_player_1, "times")
+                print("Model trained with (Episode =  " + str(episodes[j]) + ") won", num_wins_player_2, "times")  
                 print("\n")
                 won_games[i] += num_wins_player_1
         print("-------------------------------------------------------------------------------------------------------------")
         print("Final scores")
         print("\n")
-        #inverse the won games list
-        won_games = won_games[::-1]
         for i in range(len(episodes)): 
             print("Model trained with (Episode = " + str(episodes[i]) + ") won", won_games[i], "")
         print("-------------------------------------------------------------------------------------------------------------")

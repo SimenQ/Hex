@@ -4,8 +4,8 @@ from neuralnet.neuralnet import NeuralNet
 from ClientSide.ActorClient import ActorClient
 
 class MyClient(ActorClient): 
-    def __init__(self, host=..., port=..., cert=..., auth=..., echo=..., qualify=..., api_port=..., league_port=..., log_fmt=None, episode_number =...):
-        super().__init__(host, port, cert, auth, echo, qualify, api_port, league_port, log_fmt)
+    def __init__(self, auth=..., qualify=..., episode_number =...):
+        super().__init__(auth, qualify)
         self.episode_number = episode_number
 
     def set_actor(self, actor):

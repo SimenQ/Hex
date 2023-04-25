@@ -120,8 +120,11 @@ class NeuralNet:
         return legal_moves, model_predictions[1]
     
 
-    def best_action(self, normalized_predictions):
-        best_index = np.argmax(normalized_predictions[0])
+    def best_action(self, normalized_predictions, random=False):
+        if random:  
+            best_index = np.random.choice(self.board_size**2, 1, p = normalized_predictions[0])[0] 
+        else: 
+            best_index = np.argmax(normalized_predictions[0])
         best_move = NeuralNet.convert_to_2d_move(best_index, self.board_size)
         return best_move
 
@@ -131,10 +134,9 @@ class NeuralNet:
         print("%s%s saved" % (model_name, episode_number))
 
     def load_saved_model(self, episode_number):
-        model_path = "models/%s_%s_episode%s.h5" % (self.board_size, self.board_size, episode_number)
-        with open(model_path, "r", encoding="utf-8") as f:
-            loaded_model = ks.models.load_model(f, compile=False)
-        print("%s_%s_episode%s loaded" % (self.board_size, self.board_size, episode_number))
+        model_path = "models/%sx%s_episode%s.h5" % (self.board_size, self.board_size, episode_number)
+        loaded_model = ks.models.load_model(model_path, compile=False)
+        print("%sx%s_episode%s loaded" % (self.board_size, self.board_size, episode_number))
         return loaded_model
 
     @staticmethod

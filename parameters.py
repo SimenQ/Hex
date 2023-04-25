@@ -4,8 +4,8 @@ class Parameters:
         self.board_size = 5
         self.starting_player = None #0 for mix
         # MCTS parameters
-        self.number_of_games = 5
-        self.number_search_episodes_for_each_move = 20
+        self.number_of_games = 20
+        self.number_search_episodes_for_each_move = 500
         self.epsilon = 1
         self.epsilon_decay = 0.985
         # ANET parameters
