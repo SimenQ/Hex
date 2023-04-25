@@ -1,7 +1,7 @@
 
 import numpy as np
 from neuralnet.neuralnet import NeuralNet
-from ClientSide.ActorClient import ActorClient
+from .ActorClient import ActorClient
 
 class MyClient(ActorClient): 
     

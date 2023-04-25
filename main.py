@@ -1,3 +1,4 @@
+
 from parameters import Parameters
 from game.board import Board
 from game.board_visualizer import BoardVisualizer
@@ -7,6 +8,8 @@ from mcts.simulator import Simulator
 from neuralnet.neuralnet import NeuralNet
 from neuralnet.rbuf import RBUF
 from ClientSide.play_online import MyClient
+
+
 
 #Initialize the necceasry objects and parameters from the different classes
 p = Parameters()
@@ -121,7 +124,7 @@ def run_topp(save_interval):
     topp.tournament(board, episodes, models, p.topp_games, board_visualizer, display_last_game=p.visualize_last_game)
 
 
-if __name__ == "__main__":i
+if __name__ == "__main__":
     if (p.oht): 
         bsa = MyClient(p.auth, p.qualify, p.oht_episode)
         bsa.run()
