@@ -97,7 +97,7 @@ def run_and_save_model(save_interval):
     epsilon = p.epsilon
     for game in range(p.number_of_games): 
         if game % save_interval == 0:
-            nn.save_model(f"{p.board_size}x{p.board_size}_episode", game)
+            nn.save_model(f"{p.board_size}_{p.board_size}_episode", game)
         print("Game number: ", str(game+1))
         if p.starting_player == None: 
             player = game % 2 + 1
@@ -106,7 +106,7 @@ def run_and_save_model(save_interval):
         run_game(sig=sigma, eps=epsilon, starting_player=player)
         sigma *= p.sigma_decay
         epsilon *= p.epsilon_decay
-    nn.save_model(f"{p.board_size}x{p.board_size}_episode", p.number_of_games)
+    nn.save_model(f"{p.board_size}_{p.board_size}_episode", p.number_of_games)
 
 def run_topp(save_interval): 
     episodes = []

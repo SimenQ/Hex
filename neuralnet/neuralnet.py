@@ -21,7 +21,7 @@ class NeuralNet:
                 self.model = self.load_saved_model(episode_number)
             except OSError:
                 raise ValueError(
-                    f"Failed to load model named {self.board_size}x{self.board_size}_episode{episode_number}. Did you provide the correct episode number?"
+                    f"Failed to load model named {self.board_size}_{self.board_size}_episode{episode_number}. Did you provide the correct episode number?"
                 )
         else:
             self.model = self.init_model(
@@ -131,9 +131,10 @@ class NeuralNet:
         print("%s%s saved" % (model_name, episode_number))
 
     def load_saved_model(self, episode_number):
-        model_path = "models/%sx%s_episode%s.h5" % (self.board_size, self.board_size, episode_number)
-        loaded_model = ks.models.load_model(model_path, compile=False)
-        print("%sx%s_episode%s loaded" % (self.board_size, self.board_size, episode_number))
+        model_path = "models/%s_%s_episode%s.h5" % (self.board_size, self.board_size, episode_number)
+        with open(model_path, "r", encoding="utf-8") as f:
+            loaded_model = ks.models.load_model(f, compile=False)
+        print("%s_%s_episode%s loaded" % (self.board_size, self.board_size, episode_number))
         return loaded_model
 
     @staticmethod
