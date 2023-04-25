@@ -6,6 +6,7 @@ from mcts.MonteCarloTreeSearch import MCTS
 from mcts.simulator import Simulator
 from neuralnet.neuralnet import NeuralNet
 from neuralnet.rbuf import RBUF
+from ClientSide.play_online import MyClient
 
 #Initialize the necceasry objects and parameters from the different classes
 p = Parameters()
@@ -120,13 +121,17 @@ def run_topp(save_interval):
     topp.tournament(board, episodes, models, p.topp_games, board_visualizer, display_last_game=p.visualize_last_game)
 
 
-if __name__ == "__main__":
-    if(p.train_ANET and not p.topp):
+if __name__ == "__main__":i
+    if (p.oht): 
+        bsa = MyClient(p.auth, p.qualify, p.oht_episode)
+        bsa.run()
+    elif(p.train_ANET and not p.topp):
         run_and_save_model(save_interval)
     elif (p.topp and not p.train_ANET):
-        run_topp(save_interval)
+        run_topp(save_interval) 
     else: 
         run_and_save_model(save_interval)
         run_topp(save_interval)
        
+    
     
