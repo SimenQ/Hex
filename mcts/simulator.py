@@ -1,4 +1,5 @@
 
+import time
 import numpy as np
 import random
 from game.board import Board
@@ -22,7 +23,7 @@ class Simulator:
         self.board.board = board_state 
 
     def rollout_game(self, sigma, epsilon, board_copy): 
-        if sigma < random.random(): 
+        if sigma < np.random.random(): 
             return self.tree.critic(board_copy, board_copy.player)
         while not board_copy.check_winning_state(): 
             next_move = self.tree.rollout(board_copy, epsilon, board_copy.player)
@@ -37,9 +38,12 @@ class Simulator:
     
     def simulate(self, sigma, epsilon, num_search):
         board_copy = self.board.copy()
-        num_simulations_dynamic = int(num_search / len(board_copy.get_legal_moves()))
+        num_simulations_dynamic = int(num_search / (len(board_copy.get_legal_moves())))
 
-        for i in range(max(num_simulations_dynamic, 10)): 
+        t_start = time.time()
+        i = 0
+        while ((i < num_search ) or time.time() - t_start < 2): 
+        #for i in range(max(num_simulations_dynamic, )): 
             seq = self.tree_search(board_copy)
             self.tree.expand_tree(board_copy)
             reward = self.rollout_game(sigma, epsilon, board_copy)
@@ -47,6 +51,8 @@ class Simulator:
             for val in seq: 
                 self.tree.update(val[0], val[1], reward)
             board_copy = self.board.copy()
+            i +=1
+        print(i ,":", time.time() - t_start)
         return self.tree.get_distribution(self.board)
 
     def reset(self, player): 

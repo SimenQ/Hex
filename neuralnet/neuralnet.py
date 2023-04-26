@@ -21,7 +21,7 @@ class NeuralNet:
                 self.model = self.load_saved_model(episode_number)
             except OSError:
                 raise ValueError(
-                    f"Failed to load model named {self.board_size}_{self.board_size}_episode{episode_number}. Did you provide the correct episode number?"
+                    f"Failed to load model named {self.board_size}x{self.board_size}_episode{episode_number}. Did you provide the correct episode number?"
                 )
         else:
             self.model = self.init_model(
@@ -102,8 +102,11 @@ class NeuralNet:
         self.model.fit(input_data, target_data, verbose=1, batch_size=64)
 
 
-    def predict(self, input_data):
+    def predict(self, input_data): #CNN_input):
+        #model_predictions = self.model(CNN_input)
         model_predictions = self.model(input_data)
+        #Remove the # if you want to use Espens ANN
+        #model_predictions = [model_predictions, model_predictions]
         prediction_length = len(model_predictions[0])
         legal_moves = []
         for n in range(prediction_length):
@@ -134,7 +137,9 @@ class NeuralNet:
         print("%s%s saved" % (model_name, episode_number))
 
     def load_saved_model(self, episode_number):
-        model_path = "models/%sx%s_episode%s.h5" % (self.board_size, self.board_size, episode_number)
+        model_path ="models/%sx%s_episode%s.h5" % (self.board_size, self.board_size, episode_number) #"models/7x7_episode200.h5" 
+        
+        
         loaded_model = ks.models.load_model(model_path, compile=False)
         print("%sx%s_episode%s loaded" % (self.board_size, self.board_size, episode_number))
         return loaded_model

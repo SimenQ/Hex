@@ -1,5 +1,6 @@
 import math
-import random 
+import random
+import time 
 import numpy as np
 from neuralnet.neuralnet import NeuralNet
 
@@ -78,14 +79,18 @@ class MCTS:
     #Aims to predict an action using neural network given the current state of the board and epsilon value.
     #Returns the best action if the random generated number is grater that epsilon otherwise returns a random action
     def rollout(self, board, epsilon, player):
-        random_number = random.random()
+        random_number = np.random.random()
         if random_number > epsilon:
+           
             current_state = board.get_state()
             split_values = [player]
             for i in current_state.split():
                 split_values.append(int(i))
             split_values = np.array([split_values])
+           
+            time_start = time.time()
             preds = self.neural_net.predict(split_values)
+            print(time.time() - time_start)
             return self.neural_net.best_action(preds[0])
         else: 
             return self.random_action(board)

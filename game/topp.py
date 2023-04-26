@@ -51,7 +51,7 @@ class Topp:
                 num_wins_player_2 = 0
                 print("Model (Episode: " + str(episodes[i]) + ") vs. Model (Episode: " + str(episodes[j]) + ")")
                 for g in range(games): 
-                    winner = self.game(board, models[i], models[j], g % 2 + 1, board_visulazier, display = display_last_game and g == games -1 )
+                    winner = self.game(board, models[i], models[j], g % 2 + 1, board_visulazier, display = display_last_game) #and g == games -1 )
                     if winner == 1: 
                         num_wins_player_1 +=1 
                         won_games[str(episodes[i])] += 1

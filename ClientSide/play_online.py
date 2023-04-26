@@ -76,9 +76,41 @@ class MyClient(ActorClient):
                  /|
         """
         self.logger.info('Get action: state=%s', state)
-        preds = self.actor.predict(np.array([state]))[0]
+
+        #
+        #state = np.where(state == 2, -1, state)
+        st = (np.transpose(np.array(state[1:]).reshape(7,7))).flatten()
+        #state_cnn = self.modify_for_CNN(np.array(state[1:]).reshape(7,7), state[0], player2_rep_as_2=True )
+        state_cnn = self.modify_for_CNN(st.reshape(7,7), state[0], player2_rep_as_2=True )
+        #
+
+        #
+        preds = self.actor.predict(np.array([state]), np.array([state_cnn]))[0]
+        #preds = self.actor.predict(np.array([state]))[0]
+        #
+
         next_move = self.actor.best_action(preds, random = False)
-        return int(next_move[0]), int(next_move[1])
+
+        return int(next_move[1]), int(next_move[0]) 
+        #return int(next_move[0]), int(next_move[1])
+    
+    def modify_for_CNN(self, state, turn, player2_rep_as_2: bool = False):
+        final_matrix = []
+        board_size = 7
+
+        features = [1, 2, 0] if player2_rep_as_2 else [1, -1, 0]
+        for feat in features:
+            x = np.where(state == feat, 1, 0)
+            final_matrix.append(x)
+
+        if turn == 1:
+            final_matrix.append(np.ones((board_size, board_size)))
+            final_matrix.append(np.zeros((board_size, board_size)))
+        else:
+            final_matrix.append(np.zeros((board_size, board_size)))
+            final_matrix.append(np.ones((board_size, board_size)))
+
+        return np.rollaxis(np.array(final_matrix), 0, 3)
     
     def handle_game_over(self, winner, end_state):
         """Called after each game

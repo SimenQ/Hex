@@ -1,3 +1,4 @@
+import time
 from parameters import Parameters
 from game.board import Board
 from game.board_visualizer import BoardVisualizer
@@ -31,7 +32,7 @@ def run_game(sig, eps, starting_player):
         
         # Simulate the game using MCTS
         D, Q = s.simulate(sigma=sig, epsilon=eps, num_search=p.number_search_episodes_for_each_move)
-        
+
         # Check if there is a winning move in the distribution and choose it if there is
         D = check_for_winning_move_from_D(board, D)
         
@@ -46,6 +47,8 @@ def run_game(sig, eps, starting_player):
         
         rbuf.add((state_str, D, Q))
         board.make_move(best_move)
+        #board_visualizer.draw_board(board.board)
+        #time.sleep(0.5)
         s.reset(board.player)
     tree.reset()
     nn.fit(rbuf.get_random_batch(p.batch_size))
