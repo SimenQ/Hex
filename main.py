@@ -121,7 +121,7 @@ def run_topp(save_interval):
     topp.tournament(board, episodes, models, p.topp_games, board_visualizer, display_last_game=p.visualize_last_game)
 
 
-if __name__ == "__main__":i
+if __name__ == "__main__":
     if (p.oht): 
         bsa = MyClient(p.auth, p.qualify, p.oht_episode)
         bsa.run()
